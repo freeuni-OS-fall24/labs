@@ -338,11 +338,10 @@ grade:
 	./grade-lab-$(LAB) $(GRADEFLAGS)
 
 ##
-## FOR web handin
+## FOR submissions
 ##
 
-
-handin-check:
+submit-check:
 	@if ! test -d .git; then \
 		echo No .git directory, is this a git repository?; \
 		false; \
@@ -364,16 +363,7 @@ handin-check:
 		test "$$r" = y; \
 	fi
 
-UPSTREAM := $(shell git remote -v | grep -m 1 "freeuni" | awk '{split($$0,a," "); print a[1]}')
+zipball: clean submit-check
+	git archive --verbose --format zip --output lab-$(LAB)-handin.zip HEAD
 
-tarball: handin-check
-	@SUF=$(LAB); \
-	git archive --format=tar HEAD > lab-$$SUF-handin.tar; \
-	git diff $(UPSTREAM)/$(LAB) > lab-$$SUF-diff.patch; \
-	tar -rf lab-$$SUF-handin.tar lab-$$SUF-diff.patch; \
-	gzip -c lab-$$SUF-handin.tar > lab-$$SUF-handin.tar.gz; \
-	rm lab-$$SUF-handin.tar; \
-	rm lab-$$SUF-diff.patch; \
-
-
-.PHONY: tarball clean grade handin-check
+.PHONY: zipball clean grade submit-check
