@@ -384,6 +384,6 @@ submit-check:
 	fi
 
 zipball: clean submit-check
-	git archive --verbose --format zip --output lab.zip HEAD
+	git archive --verbose --format zip --output lab-$(LAB)-handin.zip HEAD
 
 .PHONY: zipball clean grade submit-check
